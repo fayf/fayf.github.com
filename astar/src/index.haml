@@ -1,0 +1,18 @@
+!!! 5
+%html
+	%head
+		%meta{:charset => "UTF-8"}
+		%title A* Test
+		%style#css{:type => "text/css"}
+		%link{:href => "css/style.css", :rel => "stylesheet", :type => "text/css"}
+		%script{:src => "js/jquery-1.8.1.min.js", :type => "text/javascript"}
+		%script{:src => "js/binary_heap.js", :type => "text/javascript"}
+		%script{:src => "js/astar.js", :type => "text/javascript"}
+		%script{:src => "js/renderer.js", :type => "text/javascript"}
+		%script{:src => "js/run.js", :type => "text/javascript"}
+	%body
+		#container
+		#controls
+			%input#btn-debug{:type => "button", :value => "show debug"}
+			%input#btn-mode{:type => "button", :value => "toggle mode"}
+		#debug

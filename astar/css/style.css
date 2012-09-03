@@ -1,0 +1,39 @@
+body{
+	margin: 0;
+	font-family: sans-serif;
+}
+div.node{
+	text-align: center;
+}
+div#debug{
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	background: rgba(255,255,255,0.9);
+	width: 300px;
+	height: 100px;
+	overflow: scroll;
+}
+div.node:first-child{
+	margin-left: 0;
+}
+div.start{
+	background: purple;
+}
+div.end{
+	background: blue;
+}
+div.blocked{
+	background: black;
+}
+div.path{
+	background: red;
+}
+div.odd + div.node{
+	margin-left: 0;
+}
+div#controls{
+	position: fixed;
+	bottom: 0;
+	left: 0;
+}
