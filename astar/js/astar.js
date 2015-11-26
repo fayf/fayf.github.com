@@ -12,19 +12,21 @@ function AStar(width, height, memoize, debug){
 	if(memoize) this.memo = [];
 
 	this.neighbourReject = (function(width){
-		if(width == 1) return function(c, x){
-			return (c == x || Math.abs(c-x)>1);
-		}
-		if(width == 2) return function(c, x){
-			if(x%2 == 0 && (c > x+3 || c < x-2)) return true;
-			if(x%2 == 1 && !(c == x-2 || c == x-1 || c == x+2)) return true;
+		if(width == 1)
+			return function(c, x){
+				return (c == x || Math.abs(c-x)>1);
+			};
+		else if(width == 2)
+			return function(c, x){
+				if(x%2 === 0 && (c > x+3 || c < x-2)) return true;
+				if(x%2 === 1 && !(c == x-2 || c == x-1 || c == x+2)) return true;
+				return false;
+			};
+		else return function(c, x){
+			if(x%this.w === 0 && c%this.w == this.w-1) return true; //start of row, discount end of row
+			if(x%this.w === this.w-1 && c%this.w === 0) return true; //end of row, discount start of row
 			return false;
-		}
-		return function(c, x){
-			if(x%this.w == 0 && c%this.w == this.w-1) return true; //start of row, discount end of row
-			if(x%this.w == this.w-1 && c%this.w == 0) return true; //end of row, discount start of row
-			return false;
-		}
+		};
 	})(this.w);
 
 	this.init();
@@ -48,7 +50,7 @@ AStar.prototype = {
 
 		if(x < 0 || x > this.last) return n; //out of bounds
 
-		var evenRow = Math.floor(x/this.w)%2 == 0;
+		var evenRow = Math.floor(x/this.w)%2 === 0;
 		var candidates = [
 			x-1, x+1, //left, right
 			x-this.w, x-this.w+(evenRow?-1:1), //above
@@ -57,12 +59,12 @@ AStar.prototype = {
 
 		for (var i = candidates.length - 1; i >= 0; i--) {
 			var c = candidates[i];
-			if(c < 0 || c > this.last //out of bounds
-				|| this.neighbourReject(c, x)
-				|| n.indexOf(c)>=0)
+			if(c < 0 || c > this.last || //out of bounds
+				this.neighbourReject(c, x) ||
+				n.indexOf(c)>=0)
 				continue;
 			n.push(c);
-		};
+		}
 
 		return n.sort(numSortFn);
 	},
@@ -81,7 +83,7 @@ AStar.prototype = {
 			y1 = Math.floor(i1/this.w),
 			y2 = Math.floor(i2/this.w),
 			dx = x2-x1,
-			dy = y2-y1
+			dy = y2-y1,
 			same = (dx >= 0 && dy >=0) || (dx < 0 && dy < 0);
 
 		return same?
@@ -144,7 +146,7 @@ AStar.prototype = {
 				considered: false,
 				blocked: false,
 				from: null
-			}
-		};
-	},
-}
+			};
+		}
+	}
+};

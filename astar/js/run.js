@@ -2,10 +2,11 @@ $(document).ready(function(){
 	dbg = $('#debug');
 
 	var astar = new AStar(100,100, true);
+
 	var renderer = new AStarRenderer("#container", astar);
 	for (var i = astar.grid.length - 1; i >= 0; i--) {
 		if(Math.random() < 0.3) renderer.block(i);
-	};
+	}
 	renderer.drawGrid();
 
 	$('#btn-debug').click(function(){

@@ -1,5 +1,6 @@
 function BinaryHeap(scoreFunction){
 	this.content = [];
+	this.indices = [];
 	this.scoreFunction = scoreFunction;
 }
 
@@ -7,6 +8,7 @@ BinaryHeap.prototype = {
 	push: function(element) {
 		// Add the new element to the end of the array.
 		this.content.push(element);
+		this.indices.push(this.content.length-1);
 
 		// Allow it to sink down.
 		this.sinkDown(this.content.length - 1);
@@ -54,7 +56,6 @@ BinaryHeap.prototype = {
 
 		// When at 0, an element can not sink any further.
 		while (n > 0) {
-
 			// Compute the parent element's index, and fetch it.
 			var parentN = ((n + 1) >> 1) - 1,
 				parent = this.content[parentN];
@@ -62,12 +63,13 @@ BinaryHeap.prototype = {
 			if (this.scoreFunction(element) < this.scoreFunction(parent)) {
 				this.content[parentN] = element;
 				this.content[n] = parent;
+
+				this.indices[parentN] = n;
+				this.indices[n] = parentN;
 				// Update 'n' to continue at the new position.
 				n = parentN;
-			}
-
-			// Found a parent that is less, no need to sink any further.
-			else {
+			}else {
+				// Found a parent that is less, no need to sink any further.
 				break;
 			}
 		}
@@ -85,14 +87,15 @@ BinaryHeap.prototype = {
 			// if any.
 			var swap = null;
 			// If the first child exists (is inside the array)...
+			var child1Score;
 			if (child1N < length) {
-			// Look it up and compute its score.
-			var child1 = this.content[child1N],
+				// Look it up and compute its score.
+				var child1 = this.content[child1N];
 				child1Score = this.scoreFunction(child1);
 
-			// If the score is less than our element's, we need to swap.
-			if (child1Score < elemScore)
-				swap = child1N;
+				// If the score is less than our element's, we need to swap.
+				if (child1Score < elemScore)
+					swap = child1N;
 			}
 
 			// Do the same checks for the other child.
@@ -108,11 +111,12 @@ BinaryHeap.prototype = {
 			if (swap !== null) {
 				this.content[n] = this.content[swap];
 				this.content[swap] = element;
-				n = swap;
-			}
 
-			// Otherwise, we are done.
-			else {
+				this.indices[n] = swap;
+				this.indices[swap] = n;
+				n = swap;
+			}else {
+				// Otherwise, we are done.
 				break;
 			}
 		}
